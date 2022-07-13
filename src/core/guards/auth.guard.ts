@@ -17,10 +17,10 @@ export default class AuthGuard {
   }
 
   public checkAuth(): { path: string } | void {
-    const isAccessTokenExpired = JWTService.instance.isAccessTokenValid();
+    const isAccessTokenExpired = JWTService.instance.isAccessTokenExpired();
 
     if (isAccessTokenExpired === true) {
-      const isRefreshTokenExpired = JWTService.instance.isRefreshTokenValid();
+      const isRefreshTokenExpired = JWTService.instance.isRefreshTokenExpired();
 
       if (isRefreshTokenExpired === true) {
         return { path: ViewCollection.SIGN_IN };

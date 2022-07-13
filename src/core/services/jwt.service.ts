@@ -38,7 +38,7 @@ export class JWTService {
     return isTokenExpired;
   }
 
-  public isAccessTokenValid(): boolean {
+  public isAccessTokenExpired(): boolean {
     const accessToken = LocalStorage.instance.fetch<string>(
       TokenCollection.ACCESS_TOKEN
     );
@@ -50,7 +50,7 @@ export class JWTService {
     return this.verifyToken(accessToken);
   }
 
-  public isRefreshTokenValid(): boolean {
+  public isRefreshTokenExpired(): boolean {
     const refreshToken = LocalStorage.instance.fetch<string>(
       TokenCollection.REFRESH_TOKEN
     );
