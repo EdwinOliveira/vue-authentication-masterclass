@@ -33,16 +33,25 @@
 import { Options, Vue } from "vue-class-component";
 import { SignInModel } from "./structs/sign-in.model";
 import * as uuid from "uuid";
-import { UserEntity } from "@/shared/entities/user.entity";
-import store from "@/shared/store";
+import { StoreCollection } from "@/shared/constants/store.collection";
+import { ViewCollection } from "@/shared/constants/view.collection";
+import { StoreService } from "@/core/services/store.service";
+import { JWTService } from "@/core/services/jwt.service";
+import { UserEntity } from "@/shared/structs/entities/user.entity";
 
 @Options({ name: "app-sign-in" })
 export default class SignIn extends Vue {
   public email: string | null = null;
   public password: string | null = null;
 
+  private readonly storeService: StoreService;
+  private readonly jwtService: JWTService;
+
   public constructor() {
     super({});
+
+    this.storeService = StoreService.instance;
+    this.jwtService = JWTService.instance;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,13 +59,17 @@ export default class SignIn extends Vue {
     if (this.email !== null && this.password !== null) {
       const data = new SignInModel(this.email, this.password);
 
-      localStorage.setItem("accessToken", uuid.v4());
+      setTimeout(async () => {
+        const userEntity = new UserEntity(uuid.v4(), data.email, data.password);
 
-      const userEntity = new UserEntity(uuid.v4(), data.email, data.password);
+        console.log("v2");
 
-      store.commit("addUser", userEntity);
+        this.jwtService.refreshTokens();
 
-      this.$router.replace("/dashboard");
+        this.storeService.commit(StoreCollection.ADD_USER, userEntity);
+
+        this.$router.replace(ViewCollection.DASHBOARD);
+      }, 5000);
     }
 
     event.preventDefault();

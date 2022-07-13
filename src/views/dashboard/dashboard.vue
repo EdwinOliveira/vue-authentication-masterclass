@@ -4,7 +4,7 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import store from "@/shared/store";
+import store from "@/core/store";
 
 @Options({
   name: "app-dashboard",

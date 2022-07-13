@@ -1,5 +1,5 @@
+import { UserEntity } from "@/shared/structs/entities/user.entity";
 import { createStore } from "vuex";
-import { UserEntity } from "../entities/user.entity";
 
 export default createStore({
   state: {
